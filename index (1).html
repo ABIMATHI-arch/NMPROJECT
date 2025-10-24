@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Reminder System - SIMULATION ONLY</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #44b4ddff 0%, #b64cfcff 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin: 0;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin: 10px 0;
+        }
+
+        .warning-banner {
+            background: linear-gradient(135deg, #e38494ff,#e38494ff);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            border: 3px solid #fca5a5;
+        }
+
+        .warning-banner h2 {
+            margin: 0 0 15px 0;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .warning-banner p {
+            margin: 8px 0;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 400px 1fr;
+            gap: 30px;
+        }
+
+        .form-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            height: fit-content;
+        }
+
+        .activity-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .form-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            color: #1f2937;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #374151;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #dc2626;
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .schedule-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #dc2626, #991b1b);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .schedule-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(220, 38, 38, 0.4);
+        }
+
+        .simulation-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+            background: #fef2f2;
+            border: 2px solid #dc2626;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .simulation-dot {
+            width: 12px;
+            height: 12px;
+            background: #dc2626;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .activity-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            color: #1f2937;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .email-log {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .email-entry {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .email-entry.simulating {
+            border-color: #f59e0b;
+            background: #fffbeb;
+            animation: simulating-pulse 2s infinite;
+        }
+
+        .email-entry.demo-complete {
+            border-color: #dc2626;
+            background: #fef2f2;
+        }
+
+        .email-entry.scheduled {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+
+        @keyframes simulating-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .email-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .email-subject {
+            font-weight: 700;
+            color: #1f2937;
+            font-size: 1.1rem;
+        }
+
+        .email-recipient {
+            color: #3b82f6;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .email-status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .status-scheduled {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .status-simulating {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .status-demo-complete {
+            background: #fecaca;
+            color: #dc2626;
+        }
+
+        .email-time {
+            font-size: 0.9rem;
+            color: #6b7280;
+            margin: 10px 0;
+        }
+
+        .email-preview {
+            background: #f9fafb;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            border-left: 4px solid #e5e7eb;
+        }
+
+        .countdown-timer {
+            font-family: 'Courier New', monospace;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #dc2626;
+            text-align: center;
+            padding: 10px;
+            background: #fee2e2;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        .reality-check {
+            background: #fef2f2;
+            border: 3px solid #dc2626;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .reality-check h4 {
+            margin: 0 0 10px 0;
+            color: #dc2626;
+            font-size: 1.2rem;
+        }
+
+        .reality-check p {
+            margin: 8px 0;
+            color: #991b1b;
+            font-weight: 500;
+        }
+
+        @media (max-width: 1024px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⚠️ EMAIL SIMULATION DEMO</h1>
+            <p>This is a demonstration only - NO REAL EMAILS ARE SENT</p>
+        </div>
+
+        <div class="warning-banner">
+            <h2>🚨 IMPORTANT DISCLAIMER</h2>
+            <p><strong>THIS IS A SIMULATION ONLY!</strong></p>
+            <p>• No actual emails will be sent to recipients</p>
+            <p>• This demonstrates how email automation would work</p>
+            <p>• Real email sending requires server-side implementation</p>
+            <p>• Recipients will NOT receive any messages from this demo</p>
+        </div>
+
+        <div class="main-grid">
+            <div class="form-panel">
+                <div class="form-title">
+                    🎭 Demo Email Scheduler
+                </div>
+
+                <div class="simulation-indicator">
+                    <div class="simulation-dot"></div>
+                    <span><strong>SIMULATION MODE:</strong> No real emails sent</span>
+                </div>
+
+                <form id="emailForm">
+                    <div class="form-group">
+                        <label for="recipientEmail">Recipient Email (Demo Only)</label>
+                        <input type="email" id="recipientEmail" required placeholder="demo@example.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="emailSubject">Email Subject (Demo Only)</label>
+                        <input type="text" id="emailSubject" required placeholder="Test Subject">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sendDateTime">Demo Send Time</label>
+                        <input type="datetime-local" id="sendDateTime" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="emailBody">Email Message (Demo Only)</label>
+                        <textarea id="emailBody" required placeholder="This is just a demo message..."></textarea>
+                    </div>
+
+                    <button type="submit" class="schedule-btn">
+                        🎭 Schedule Demo (No Real Email)
+                    </button>
+                </form>
+
+                <div class="reality-check">
+                    <h4>🔧 For Real Email Sending You Need:</h4>
+                    <p>• Backend server (Node.js/Python/PHP)</p>
+                    <p>• Email service (SendGrid/Mailgun/SMTP)</p>
+                    <p>• Database for scheduling</p>
+                    <p>• Cron jobs for automation</p>
+                    <p><strong>Frontend JavaScript CANNOT send real emails!</strong></p>
+                </div>
+            </div>
+
+            <div class="activity-panel">
+                <div class="activity-title">
+                    🎬 Demo Activity Log
+                </div>
+
+                <div id="emailLog" class="email-log">
+                    <div style="text-align: center; padding: 40px; color: #6b7280;">
+                        <div style="font-size: 3rem; margin-bottom: 15px;">🎭</div>
+                        <h3>No demo emails scheduled</h3>
+                        <p>Schedule a demo to see the simulation in action!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class EmailSimulationDemo {
+            constructor() {
+                this.demoEmails = this.loadDemoEmails();
+                this.simulationInterval = null;
+                this.init();
+            }
+
+            init() {
+                this.bindElements();
+                this.bindEvents();
+                this.startSimulation();
+                this.renderEmailLog();
+                this.setMinDateTime();
+            }
+
+            bindElements() {
+                this.form = document.getElementById('emailForm');
+                this.emailLogContainer = document.getElementById('emailLog');
+            }
+
+            bindEvents() {
+                this.form.addEventListener('submit', (e) => this.scheduleDemo(e));
+            }
+
+            setMinDateTime() {
+                const now = new Date();
+                now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+                document.getElementById('sendDateTime').min = now.toISOString().slice(0, 16);
+            }
+
+            scheduleDemo(e) {
+                e.preventDefault();
+
+                const demoEmail = {
+                    id: Date.now() + Math.random(),
+                    recipient: document.getElementById('recipientEmail').value,
+                    subject: document.getElementById('emailSubject').value,
+                    body: document.getElementById('emailBody').value,
+                    sendDateTime: document.getElementById('sendDateTime').value,
+                    status: 'scheduled',
+                    scheduledAt: new Date().toISOString()
+                };
+
+                this.demoEmails.push(demoEmail);
+                this.saveDemoEmails();
+                this.renderEmailLog();
+                this.form.reset();
+                this.setMinDateTime();
+
+                this.showNotification('🎭 Demo Scheduled', `SIMULATION: Demo email scheduled for ${demoEmail.recipient}. NO REAL EMAIL WILL BE SENT!`, 'warning');
+            }
+
+            startSimulation() {
+                this.simulationInterval = setInterval(() => {
+                    this.checkDemoEmails();
+                }, 1000);
+
+                console.log('🎭 Email simulation started - NO REAL EMAILS WILL BE SENT');
+            }
+
+            checkDemoEmails() {
+                const now = new Date();
+                
+                this.demoEmails.forEach(email => {
+                    const sendTime = new Date(email.sendDateTime);
+                    
+                    if (sendTime <= now && email.status === 'scheduled') {
+                        this.simulateEmail(email);
+                    }
+                });
+            }
+
+            async simulateEmail(email) {
+                email.status = 'simulating';
+                this.renderEmailLog();
+
+                this.showNotification('🎬 SIMULATION RUNNING', `DEMO: Pretending to send email to ${email.recipient}. NO REAL EMAIL IS BEING SENT!`, 'warning');
+
+                await this.runSimulation(email);
+
+                email.status = 'demo-complete';
+                email.simulatedAt = new Date().toISOString();
+                
+                this.saveDemoEmails();
+                this.renderEmailLog();
+
+                this.showNotification('🎭 SIMULATION COMPLETE', `DEMO FINISHED: No real email was sent to ${email.recipient}. This was just a simulation!`, 'error');
+            }
+
+            async runSimulation(email) {
+                return new Promise(resolve => {
+                    setTimeout(() => {
+                        console.log(`🎭 SIMULATION COMPLETE - NO REAL EMAIL SENT:
+Recipient: ${email.recipient} (DID NOT RECEIVE ANYTHING)
+Subject: ${email.subject} (NOT ACTUALLY SENT)
+Body: ${email.body} (SIMULATION ONLY)
+Time: ${new Date().toLocaleString()} (DEMO TIMESTAMP)`);
+                        resolve();
+                    }, 2000);
+                });
+            }
+
+            renderEmailLog() {
+                if (this.demoEmails.length === 0) {
+                    this.emailLogContainer.innerHTML = `
+                        <div style="text-align: center; padding: 40px; color: #6b7280;">
+                            <div style="font-size: 3rem; margin-bottom: 15px;">🎭</div>
+                            <h3>No demo emails scheduled</h3>
+                            <p>Schedule a demo to see the simulation in action!</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const sortedEmails = [...this.demoEmails].sort((a, b) => 
+                    new Date(a.sendDateTime) - new Date(b.sendDateTime)
+                );
+
+                this.emailLogContainer.innerHTML = sortedEmails.map(email => {
+                    const sendTime = new Date(email.sendDateTime);
+                    const now = new Date();
+                    const timeUntilSend = sendTime - now;
+                    
+                    let statusClass = 'scheduled';
+                    let statusText = 'Demo Scheduled';
+                    
+                    if (email.status === 'simulating') {
+                        statusClass = 'simulating';
+                        statusText = 'SIMULATING...';
+                    } else if (email.status === 'demo-complete') {
+                        statusClass = 'demo-complete';
+                        statusText = 'DEMO ONLY - NO REAL EMAIL SENT';
+                    }
+
+                    let countdownHtml = '';
+                    if (email.status === 'scheduled' && timeUntilSend > 0) {
+                        countdownHtml = `
+                            <div class="countdown-timer">
+                                🎭 Demo runs in: ${this.formatTimeRemaining(timeUntilSend)}
+                            </div>
+                        `;
+                    } else if (email.status === 'scheduled' && timeUntilSend <= 0) {
+                        countdownHtml = `
+                            <div class="countdown-timer">
+                                🎬 RUNNING SIMULATION...
+                            </div>
+                        `;
+                    }
+
+                    return `
+                        <div class="email-entry ${email.status}">
+                            <div class="email-header">
+                                <div>
+                                    <div class="email-subject">🎭 ${email.subject}</div>
+                                    <div class="email-recipient">Demo Recipient: ${email.recipient}</div>
+                                </div>
+                                <div class="email-status status-${statusClass}">${statusText}</div>
+                            </div>
+                            
+                            <div class="email-time">
+                                📅 Demo Scheduled: ${sendTime.toLocaleString()}
+                                ${email.simulatedAt ? `<br>🎬 Simulation Completed: ${new Date(email.simulatedAt).toLocaleString()}<br><strong style="color: #dc2626; font-size: 1.1rem;">⚠️ NO REAL EMAIL WAS SENT TO ${email.recipient.toUpperCase()}</strong>` : ''}
+                            </div>
+                            
+                            ${countdownHtml}
+                            
+                            <div class="email-preview">
+                                <strong>Demo Message (Not Actually Sent):</strong><br>
+                                ${email.body.substring(0, 150)}${email.body.length > 150 ? '...' : ''}
+                            </div>
+                            
+                            ${email.status === 'demo-complete' ? `
+                                <div style="background: #fecaca; color: #dc2626; padding: 15px; border-radius: 8px; margin-top: 15px; font-weight: 700; text-align: center;">
+                                    🚨 THIS WAS A SIMULATION - ${email.recipient.toUpperCase()} DID NOT RECEIVE ANY EMAIL
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            formatTimeRemaining(ms) {
+                const totalSeconds = Math.floor(ms / 1000);
+                const days = Math.floor(totalSeconds / 86400);
+                const hours = Math.floor((totalSeconds % 86400) / 3600);
+                const minutes = Math.floor((totalSeconds % 3600) / 60);
+                const seconds = totalSeconds % 60;
+
+                if (days > 0) return `${days}d ${hours}h ${minutes}m`;
+                if (hours > 0) return `${hours}h ${minutes}m ${seconds}s`;
+                if (minutes > 0) return `${minutes}m ${seconds}s`;
+                return `${seconds}s`;
+            }
+
+            showNotification(title, message, type = 'warning') {
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: white;
+                    border-radius: 12px;
+                    padding: 20px;
+                    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                    z-index: 1000;
+                    max-width: 400px;
+                    border: 3px solid #dc2626;
+                    transform: translateX(450px);
+                    transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+                `;
+                
+                notification.innerHTML = `
+                    <div style="font-weight: 700; margin-bottom: 5px; color: #dc2626;">${title}</div>
+                    <div style="color: #991b1b; font-size: 0.9rem; font-weight: 500;">${message}</div>
+                `;
+                
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.style.transform = 'translateX(0)';
+                }, 100);
+                
+                setTimeout(() => {
+                    notification.style.transform = 'translateX(450px)';
+                    setTimeout(() => {
+                        if (document.body.contains(notification)) {
+                            document.body.removeChild(notification);
+                        }
+                    }, 400);
+                }, 5000);
+            }
+
+            saveDemoEmails() {
+                localStorage.setItem('emailSimulationDemo', JSON.stringify(this.demoEmails));
+            }
+
+            loadDemoEmails() {
+                const saved = localStorage.getItem('emailSimulationDemo');
+                return saved ? JSON.parse(saved) : [];
+            }
+        }
+
+        const emailDemo = new EmailSimulationDemo();
+
+        window.addEventListener('beforeunload', () => {
+            if (emailDemo.simulationInterval) {
+                clearInterval(emailDemo.simulationInterval);
+            }
+        });
+
+        console.log('🎭 EMAIL SIMULATION DEMO - NO REAL EMAILS WILL BE SENT');
+        console.log('⚠️ This is for demonstration purposes only');
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'988a4a8e349a7e72',t:'MTc1OTQ3MTk4Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
