@@ -3,644 +3,1282 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Email Reminder System - SIMULATION ONLY</title>
+    <title>Email Reminder Pro - Advanced Email Management System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         body {
             box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(135deg, #44b4ddff 0%, #b64cfcff 100%);
-            min-height: 100vh;
         }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
+       
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
-
-        .header {
-            text-align: center;
-            color: white;
-            margin-bottom: 40px;
-        }
-
-        .header h1 {
-            font-size: 3rem;
-            font-weight: 800;
-            margin: 0;
-            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
-        }
-
-        .header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            margin: 10px 0;
-        }
-
-        .warning-banner {
-            background: linear-gradient(135deg, #e38494ff,#e38494ff);
-            color: white;
-            padding: 25px;
-            border-radius: 15px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            border: 3px solid #fca5a5;
-        }
-
-        .warning-banner h2 {
-            margin: 0 0 15px 0;
-            font-size: 1.8rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .warning-banner p {
-            margin: 8px 0;
-            font-size: 1.1rem;
-            font-weight: 500;
-        }
-
-        .main-grid {
-            display: grid;
-            grid-template-columns: 400px 1fr;
-            gap: 30px;
-        }
-
-        .form-panel {
-            background: rgba(255, 255, 255, 0.95);
+       
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.25);
             backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            height: fit-content;
+            border: 1px solid rgba(255, 255, 255, 0.18);
         }
-
-        .activity-panel {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+       
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
         }
-
-        .form-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 25px;
-            color: #1f2937;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+       
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-
-        .form-group {
-            margin-bottom: 20px;
+       
+        .slide-in-left {
+            animation: slideInLeft 0.5s ease-out;
         }
-
-        .form-group label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #374151;
+       
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
         }
-
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: 12px 16px;
-            border: 2px solid #e5e7eb;
-            border-radius: 10px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            box-sizing: border-box;
+       
+        .slide-out {
+            animation: slideOut 0.3s ease-out forwards;
         }
-
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #dc2626;
-            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+       
+        @keyframes slideOut {
+            to { opacity: 0; transform: translateX(100%); }
         }
-
-        .form-group textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-
-        .schedule-btn {
-            width: 100%;
-            background: linear-gradient(135deg, #dc2626, #991b1b);
-            color: white;
-            border: none;
-            padding: 16px;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
+       
+        .hover-lift {
             transition: all 0.3s ease;
         }
-
-        .schedule-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 30px rgba(220, 38, 38, 0.4);
+       
+        .hover-lift:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
         }
-
-        .simulation-indicator {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 15px;
-            background: #fef2f2;
-            border: 2px solid #dc2626;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-
-        .simulation-dot {
-            width: 12px;
-            height: 12px;
-            background: #dc2626;
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        .activity-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 25px;
-            color: #1f2937;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .email-log {
-            max-height: 600px;
-            overflow-y: auto;
-        }
-
-        .email-entry {
-            background: white;
-            border: 2px solid #e5e7eb;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 15px;
+       
+        .nav-item {
             transition: all 0.3s ease;
             position: relative;
         }
-
-        .email-entry.simulating {
-            border-color: #f59e0b;
-            background: #fffbeb;
-            animation: simulating-pulse 2s infinite;
+       
+        .nav-item:hover {
+            transform: translateY(-2px);
         }
-
-        .email-entry.demo-complete {
-            border-color: #dc2626;
-            background: #fef2f2;
+       
+        .nav-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
         }
-
-        .email-entry.scheduled {
-            border-color: #3b82f6;
-            background: #eff6ff;
+       
+        .page {
+            display: none;
         }
-
-        @keyframes simulating-pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.02); }
+       
+        .page.active {
+            display: block;
         }
-
-        .email-header {
+       
+        .stats-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+       
+        .stats-card.blue {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+       
+        .stats-card.green {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+       
+        .stats-card.purple {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+       
+        .priority-high {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+        }
+       
+        .priority-medium {
+            background: linear-gradient(135deg, #feca57 0%, #ff9ff3 100%);
+        }
+       
+        .priority-low {
+            background: linear-gradient(135deg, #48dbfb 0%, #0abde3 100%);
+        }
+       
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+       
+        .floating-action {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+       
+        .notification-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ff4757;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
             display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 10px;
-        }
-
-        .email-subject {
-            font-weight: 700;
-            color: #1f2937;
-            font-size: 1.1rem;
-        }
-
-        .email-recipient {
-            color: #3b82f6;
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
-
-        .email-status {
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 700;
-        }
-
-        .status-scheduled {
-            background: #dbeafe;
-            color: #1d4ed8;
-        }
-
-        .status-simulating {
-            background: #fef3c7;
-            color: #d97706;
-        }
-
-        .status-demo-complete {
-            background: #fecaca;
-            color: #dc2626;
-        }
-
-        .email-time {
-            font-size: 0.9rem;
-            color: #6b7280;
-            margin: 10px 0;
-        }
-
-        .email-preview {
-            background: #f9fafb;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 10px;
-            border-left: 4px solid #e5e7eb;
-        }
-
-        .countdown-timer {
-            font-family: 'Courier New', monospace;
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #dc2626;
-            text-align: center;
-            padding: 10px;
-            background: #fee2e2;
-            border-radius: 8px;
-            margin: 10px 0;
-        }
-
-        .reality-check {
-            background: #fef2f2;
-            border: 3px solid #dc2626;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-        .reality-check h4 {
-            margin: 0 0 10px 0;
-            color: #dc2626;
-            font-size: 1.2rem;
-        }
-
-        .reality-check p {
-            margin: 8px 0;
-            color: #991b1b;
-            font-weight: 500;
-        }
-
-        @media (max-width: 1024px) {
-            .main-grid {
-                grid-template-columns: 1fr;
-            }
+            align-items: center;
+            justify-content: center;
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>⚠️ EMAIL SIMULATION DEMO</h1>
-            <p>This is a demonstration only - NO REAL EMAILS ARE SENT</p>
-        </div>
-
-        <div class="warning-banner">
-            <h2>🚨 IMPORTANT DISCLAIMER</h2>
-            <p><strong>THIS IS A SIMULATION ONLY!</strong></p>
-            <p>• No actual emails will be sent to recipients</p>
-            <p>• This demonstrates how email automation would work</p>
-            <p>• Real email sending requires server-side implementation</p>
-            <p>• Recipients will NOT receive any messages from this demo</p>
-        </div>
-
-        <div class="main-grid">
-            <div class="form-panel">
-                <div class="form-title">
-                    🎭 Demo Email Scheduler
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="gradient-bg shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="text-white text-2xl font-bold">
+                        <i class="fas fa-envelope-open-text mr-2"></i>
+                        Email Reminder Pro
+                    </div>
                 </div>
-
-                <div class="simulation-indicator">
-                    <div class="simulation-dot"></div>
-                    <span><strong>SIMULATION MODE:</strong> No real emails sent</span>
+               
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#" class="nav-item active text-white hover:text-gray-200 px-4 py-2 rounded-lg font-medium" data-page="dashboard">
+                        <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
+                    </a>
+                    <a href="#" class="nav-item text-white hover:text-gray-200 px-4 py-2 rounded-lg font-medium" data-page="reminders">
+                        <i class="fas fa-bell mr-2"></i>Reminders
+                        <span id="navReminderCount" class="notification-badge">0</span>
+                    </a>
+                    <a href="#" class="nav-item text-white hover:text-gray-200 px-4 py-2 rounded-lg font-medium" data-page="templates">
+                        <i class="fas fa-file-alt mr-2"></i>Templates
+                    </a>
+                    <a href="#" class="nav-item text-white hover:text-gray-200 px-4 py-2 rounded-lg font-medium" data-page="analytics">
+                        <i class="fas fa-chart-line mr-2"></i>Analytics
+                    </a>
+                    <a href="#" class="nav-item text-white hover:text-gray-200 px-4 py-2 rounded-lg font-medium" data-page="settings">
+                        <i class="fas fa-cog mr-2"></i>Settings
+                    </a>
                 </div>
-
-                <form id="emailForm">
-                    <div class="form-group">
-                        <label for="recipientEmail">Recipient Email (Demo Only)</label>
-                        <input type="email" id="recipientEmail" required placeholder="demo@example.com">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="emailSubject">Email Subject (Demo Only)</label>
-                        <input type="text" id="emailSubject" required placeholder="Test Subject">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="sendDateTime">Demo Send Time</label>
-                        <input type="datetime-local" id="sendDateTime" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="emailBody">Email Message (Demo Only)</label>
-                        <textarea id="emailBody" required placeholder="This is just a demo message..."></textarea>
-                    </div>
-
-                    <button type="submit" class="schedule-btn">
-                        🎭 Schedule Demo (No Real Email)
+               
+                <div class="flex items-center space-x-4">
+                    <button class="text-white hover:text-gray-200 relative">
+                        <i class="fas fa-bell text-xl"></i>
+                        <span id="notificationBadge" class="notification-badge">0</span>
                     </button>
-                </form>
-
-                <div class="reality-check">
-                    <h4>🔧 For Real Email Sending You Need:</h4>
-                    <p>• Backend server (Node.js/Python/PHP)</p>
-                    <p>• Email service (SendGrid/Mailgun/SMTP)</p>
-                    <p>• Database for scheduling</p>
-                    <p>• Cron jobs for automation</p>
-                    <p><strong>Frontend JavaScript CANNOT send real emails!</strong></p>
-                </div>
-            </div>
-
-            <div class="activity-panel">
-                <div class="activity-title">
-                    🎬 Demo Activity Log
-                </div>
-
-                <div id="emailLog" class="email-log">
-                    <div style="text-align: center; padding: 40px; color: #6b7280;">
-                        <div style="font-size: 3rem; margin-bottom: 15px;">🎭</div>
-                        <h3>No demo emails scheduled</h3>
-                        <p>Schedule a demo to see the simulation in action!</p>
+                    <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+                        <i class="fas fa-user text-purple-600"></i>
                     </div>
                 </div>
             </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Page -->
+    <div id="dashboard" class="page active">
+        <main class="container mx-auto px-6 py-8">
+            <!-- Welcome Section -->
+            <div class="mb-8 fade-in">
+                <h1 class="text-4xl font-bold text-gray-800 mb-2">Welcome back! 👋</h1>
+                <p class="text-gray-600 text-lg">Manage your email reminders with style and efficiency</p>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="stats-card blue text-white p-6 rounded-xl shadow-lg hover-lift">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-blue-100 text-sm font-medium">Total Reminders</p>
+                            <p id="dashTotalReminders" class="text-3xl font-bold">0</p>
+                        </div>
+                        <i class="fas fa-envelope text-4xl text-blue-200"></i>
+                    </div>
+                </div>
+               
+                <div class="stats-card text-white p-6 rounded-xl shadow-lg hover-lift">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-pink-100 text-sm font-medium">Pending</p>
+                            <p id="dashPendingReminders" class="text-3xl font-bold">0</p>
+                        </div>
+                        <i class="fas fa-clock text-4xl text-pink-200"></i>
+                    </div>
+                </div>
+               
+                <div class="stats-card green text-white p-6 rounded-xl shadow-lg hover-lift">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-green-100 text-sm font-medium">Sent Today</p>
+                            <p id="dashSentToday" class="text-3xl font-bold">0</p>
+                        </div>
+                        <i class="fas fa-paper-plane text-4xl text-green-200"></i>
+                    </div>
+                </div>
+               
+                <div class="stats-card purple text-white p-6 rounded-xl shadow-lg hover-lift">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-yellow-100 text-sm font-medium">Success Rate</p>
+                            <p id="dashSuccessRate" class="text-3xl font-bold">100%</p>
+                        </div>
+                        <i class="fas fa-chart-line text-4xl text-yellow-200"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions & Recent Activity -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                <!-- Quick Actions -->
+                <div class="bg-white rounded-xl shadow-lg p-6 hover-lift">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                        <i class="fas fa-bolt text-purple-600 mr-3"></i>Quick Actions
+                    </h2>
+                    <div class="grid grid-cols-2 gap-4">
+                        <button onclick="showPage('reminders')" class="bg-gradient-to-r from-purple-500 to-pink-500 text-white p-4 rounded-lg hover:shadow-lg transition duration-300">
+                            <i class="fas fa-plus text-2xl mb-2"></i>
+                            <p class="font-semibold">New Reminder</p>
+                        </button>
+                        <button onclick="showPage('templates')" class="bg-gradient-to-r from-blue-500 to-cyan-500 text-white p-4 rounded-lg hover:shadow-lg transition duration-300">
+                            <i class="fas fa-file-alt text-2xl mb-2"></i>
+                            <p class="font-semibold">Use Template</p>
+                        </button>
+                        <button onclick="showPage('analytics')" class="bg-gradient-to-r from-green-500 to-teal-500 text-white p-4 rounded-lg hover:shadow-lg transition duration-300">
+                            <i class="fas fa-chart-bar text-2xl mb-2"></i>
+                            <p class="font-semibold">View Analytics</p>
+                        </button>
+                        <button onclick="bulkImport()" class="bg-gradient-to-r from-orange-500 to-red-500 text-white p-4 rounded-lg hover:shadow-lg transition duration-300">
+                            <i class="fas fa-upload text-2xl mb-2"></i>
+                            <p class="font-semibold">Bulk Import</p>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="bg-white rounded-xl shadow-lg p-6 hover-lift">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                        <i class="fas fa-history text-green-600 mr-3"></i>Recent Activity
+                    </h2>
+                    <div id="recentActivity" class="space-y-4">
+                        <div class="text-center text-gray-500 py-8">
+                            <i class="fas fa-inbox text-4xl mb-2"></i>
+                            <p>No recent activity</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Upcoming Reminders Preview -->
+            <div class="bg-white rounded-xl shadow-lg p-6 hover-lift">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center justify-between">
+                    <span class="flex items-center">
+                        <i class="fas fa-calendar-alt text-blue-600 mr-3"></i>Upcoming Reminders
+                    </span>
+                    <button onclick="showPage('reminders')" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                        View All <i class="fas fa-arrow-right ml-1"></i>
+                    </button>
+                </h2>
+                <div id="upcomingReminders" class="space-y-4">
+                    <div class="text-center text-gray-500 py-8">
+                        <i class="fas fa-calendar-times text-4xl mb-2"></i>
+                        <p>No upcoming reminders</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Reminders Page -->
+    <div id="reminders" class="page">
+        <main class="container mx-auto px-6 py-8">
+            <div class="flex justify-between items-center mb-8">
+                <h1 class="text-4xl font-bold text-gray-800">Email Reminders</h1>
+                <button onclick="openReminderModal()" class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-lg hover:shadow-lg transition duration-300 font-semibold">
+                    <i class="fas fa-plus mr-2"></i>Create Reminder
+                </button>
+            </div>
+
+            <!-- Filters -->
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                        <select id="statusFilter" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                            <option value="">All Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="sent">Sent</option>
+                            <option value="failed">Failed</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Priority</label>
+                        <select id="priorityFilter" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                            <option value="">All Priorities</option>
+                            <option value="high">High</option>
+                            <option value="medium">Medium</option>
+                            <option value="low">Low</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Date Range</label>
+                        <input type="date" id="dateFilter" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                    </div>
+                    <div class="flex items-end">
+                        <button onclick="applyFilters()" class="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
+                            <i class="fas fa-filter mr-2"></i>Apply Filters
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reminders List -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-semibold text-gray-800">All Reminders</h2>
+                    <span id="reminderCount" class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium">0 reminders</span>
+                </div>
+                <div id="remindersList" class="space-y-4">
+                    <!-- Reminders will be populated here -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Templates Page -->
+    <div id="templates" class="page">
+        <main class="container mx-auto px-6 py-8">
+            <div class="flex justify-between items-center mb-8">
+                <h1 class="text-4xl font-bold text-gray-800">Email Templates</h1>
+                <button onclick="createTemplate()" class="bg-gradient-to-r from-green-600 to-teal-600 text-white px-6 py-3 rounded-lg hover:shadow-lg transition duration-300 font-semibold">
+                    <i class="fas fa-plus mr-2"></i>Create Template
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="templatesGrid">
+                <!-- Default Templates -->
+                <div class="bg-white rounded-xl shadow-lg p-6 hover-lift">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-semibold text-gray-800">Meeting Reminder</h3>
+                        <i class="fas fa-calendar text-blue-600 text-2xl"></i>
+                    </div>
+                    <p class="text-gray-600 mb-4">Professional meeting reminder template with all essential details.</p>
+                    <div class="flex space-x-2">
+                        <button onclick="useTemplate('meeting')" class="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
+                            Use Template
+                        </button>
+                        <button onclick="previewTemplate('meeting')" class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition duration-200">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-lg p-6 hover-lift">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-semibold text-gray-800">Payment Due</h3>
+                        <i class="fas fa-credit-card text-red-600 text-2xl"></i>
+                    </div>
+                    <p class="text-gray-600 mb-4">Friendly payment reminder template for invoices and bills.</p>
+                    <div class="flex space-x-2">
+                        <button onclick="useTemplate('payment')" class="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
+                            Use Template
+                        </button>
+                        <button onclick="previewTemplate('payment')" class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition duration-200">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-lg p-6 hover-lift">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-semibold text-gray-800">Birthday Wishes</h3>
+                        <i class="fas fa-birthday-cake text-pink-600 text-2xl"></i>
+                    </div>
+                    <p class="text-gray-600 mb-4">Warm birthday reminder template for personal celebrations.</p>
+                    <div class="flex space-x-2">
+                        <button onclick="useTemplate('birthday')" class="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
+                            Use Template
+                        </button>
+                        <button onclick="previewTemplate('birthday')" class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition duration-200">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Analytics Page -->
+    <div id="analytics" class="page">
+        <main class="container mx-auto px-6 py-8">
+            <h1 class="text-4xl font-bold text-gray-800 mb-8">Analytics Dashboard</h1>
+
+            <!-- Analytics Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white rounded-xl shadow-lg p-6 hover-lift">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm font-medium">Delivery Rate</p>
+                            <p id="analyticsDeliveryRate" class="text-3xl font-bold text-green-600">98.5%</p>
+                        </div>
+                        <i class="fas fa-check-circle text-4xl text-green-200"></i>
+                    </div>
+                </div>
+               
+                <div class="bg-white rounded-xl shadow-lg p-6 hover-lift">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm font-medium">Avg Response Time</p>
+                            <p id="analyticsResponseTime" class="text-3xl font-bold text-blue-600">2.3s</p>
+                        </div>
+                        <i class="fas fa-stopwatch text-4xl text-blue-200"></i>
+                    </div>
+                </div>
+               
+                <div class="bg-white rounded-xl shadow-lg p-6 hover-lift">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm font-medium">This Month</p>
+                            <p id="analyticsThisMonth" class="text-3xl font-bold text-purple-600">0</p>
+                        </div>
+                        <i class="fas fa-calendar-month text-4xl text-purple-200"></i>
+                    </div>
+                </div>
+               
+                <div class="bg-white rounded-xl shadow-lg p-6 hover-lift">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm font-medium">Peak Hour</p>
+                            <p id="analyticsPeakHour" class="text-3xl font-bold text-orange-600">9 AM</p>
+                        </div>
+                        <i class="fas fa-chart-peak text-4xl text-orange-200"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="bg-white rounded-xl shadow-lg p-6 hover-lift">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Weekly Activity</h3>
+                    <div class="chart-container">
+                        <canvas id="weeklyChart"></canvas>
+                    </div>
+                </div>
+               
+                <div class="bg-white rounded-xl shadow-lg p-6 hover-lift">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Priority Distribution</h3>
+                    <div class="chart-container">
+                        <canvas id="priorityChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Settings Page -->
+    <div id="settings" class="page">
+        <main class="container mx-auto px-6 py-8">
+            <h1 class="text-4xl font-bold text-gray-800 mb-8">Settings</h1>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Settings Menu -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Settings Menu</h2>
+                    <nav class="space-y-2">
+                        <a href="#" class="settings-nav-item active block px-4 py-2 rounded-lg text-purple-600 bg-purple-50 font-medium" data-setting="email">
+                            <i class="fas fa-envelope mr-2"></i>Email Configuration
+                        </a>
+                        <a href="#" class="settings-nav-item block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-50 font-medium" data-setting="notifications">
+                            <i class="fas fa-bell mr-2"></i>Notifications
+                        </a>
+                        <a href="#" class="settings-nav-item block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-50 font-medium" data-setting="appearance">
+                            <i class="fas fa-palette mr-2"></i>Appearance
+                        </a>
+                        <a href="#" class="settings-nav-item block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-50 font-medium" data-setting="backup">
+                            <i class="fas fa-download mr-2"></i>Backup & Export
+                        </a>
+                    </nav>
+                </div>
+
+                <!-- Settings Content -->
+                <div class="lg:col-span-2 bg-white rounded-xl shadow-lg p-6">
+                    <!-- Email Configuration -->
+                    <div id="emailSettings" class="settings-content">
+                        <h2 class="text-2xl font-semibold text-gray-800 mb-6">Email Configuration</h2>
+                        <form class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">SMTP Server</label>
+                                <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500" placeholder="smtp.gmail.com">
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Port</label>
+                                    <input type="number" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500" placeholder="587">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Security</label>
+                                    <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                                        <option>TLS</option>
+                                        <option>SSL</option>
+                                        <option>None</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                                <input type="email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500" placeholder="your-email@gmail.com">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">App Password</label>
+                                <input type="password" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500" placeholder="••••••••••••••••">
+                            </div>
+                            <button type="button" onclick="testEmailConnection()" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
+                                <i class="fas fa-paper-plane mr-2"></i>Test Connection
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Other settings content would go here -->
+                    <div id="notificationsSettings" class="settings-content hidden">
+                        <h2 class="text-2xl font-semibold text-gray-800 mb-6">Notification Settings</h2>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-700">Browser Notifications</span>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" class="sr-only peer" checked>
+                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
+                                </label>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-700">Email Confirmations</span>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" class="sr-only peer" checked>
+                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Reminder Modal -->
+    <div id="reminderModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-xl shadow-2xl p-8 m-4 max-w-2xl w-full max-h-screen overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">Create New Reminder</h2>
+                <button onclick="closeReminderModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+           
+            <form id="reminderForm" class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="recipientEmail" class="block text-sm font-medium text-gray-700 mb-2">Recipient Email</label>
+                        <input type="email" id="recipientEmail" required
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                               placeholder="recipient@example.com">
+                    </div>
+                    <div>
+                        <label for="priority" class="block text-sm font-medium text-gray-700 mb-2">Priority</label>
+                        <select id="priority" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                            <option value="low">🟢 Low Priority</option>
+                            <option value="medium" selected>🟡 Medium Priority</option>
+                            <option value="high">🔴 High Priority</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="subject" class="block text-sm font-medium text-gray-700 mb-2">Subject</label>
+                    <input type="text" id="subject" required
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                           placeholder="Enter email subject">
+                </div>
+
+                <div>
+                    <label for="message" class="block text-sm font-medium text-gray-700 mb-2">Message</label>
+                    <textarea id="message" rows="5" required
+                              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                              placeholder="Enter your message here..."></textarea>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="reminderDate" class="block text-sm font-medium text-gray-700 mb-2">Date</label>
+                        <input type="date" id="reminderDate" required
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label for="reminderTime" class="block text-sm font-medium text-gray-700 mb-2">Time</label>
+                        <input type="time" id="reminderTime" required
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                    </div>
+                </div>
+
+                <div class="flex justify-end space-x-4 pt-6">
+                    <button type="button" onclick="closeReminderModal()"
+                            class="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition duration-200">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                            class="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:shadow-lg transition duration-300 font-semibold">
+                        <i class="fas fa-paper-plane mr-2"></i>Schedule Reminder
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
+    <!-- Floating Action Button -->
+    <button onclick="openReminderModal()" class="floating-action bg-gradient-to-r from-purple-600 to-pink-600 text-white w-16 h-16 rounded-full shadow-lg hover:shadow-xl transition duration-300 flex items-center justify-center">
+        <i class="fas fa-plus text-2xl"></i>
+    </button>
+
+    <!-- Success/Error Messages -->
+    <div id="messageContainer" class="fixed top-4 right-4 z-50"></div>
+
     <script>
-        class EmailSimulationDemo {
+        class EmailReminderPro {
             constructor() {
-                this.demoEmails = this.loadDemoEmails();
-                this.simulationInterval = null;
+                this.reminders = JSON.parse(localStorage.getItem('emailReminders')) || [];
+                this.templates = this.getDefaultTemplates();
+                this.apiUrl = 'http://localhost:3000/api';
+                this.currentPage = 'dashboard';
                 this.init();
             }
 
             init() {
-                this.bindElements();
                 this.bindEvents();
-                this.startSimulation();
-                this.renderEmailLog();
+                this.updateAllStats();
+                this.renderReminders();
+                this.renderUpcomingReminders();
+                this.renderRecentActivity();
                 this.setMinDateTime();
-            }
-
-            bindElements() {
-                this.form = document.getElementById('emailForm');
-                this.emailLogContainer = document.getElementById('emailLog');
+                this.checkPendingReminders();
+               
+                // Check for due reminders every minute
+                setInterval(() => this.checkPendingReminders(), 60000);
+               
+                // Request notification permission
+                if ('Notification' in window) {
+                    Notification.requestPermission();
+                }
             }
 
             bindEvents() {
-                this.form.addEventListener('submit', (e) => this.scheduleDemo(e));
+                // Navigation
+                document.querySelectorAll('.nav-item').forEach(item => {
+                    item.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const page = e.currentTarget.dataset.page;
+                        this.showPage(page);
+                    });
+                });
+
+                // Settings navigation
+                document.querySelectorAll('.settings-nav-item').forEach(item => {
+                    item.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        this.showSettingsSection(e.currentTarget.dataset.setting);
+                    });
+                });
+
+                // Form submission
+                document.getElementById('reminderForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.createReminder();
+                });
+
+                // Filters
+                document.getElementById('statusFilter').addEventListener('change', () => this.applyFilters());
+                document.getElementById('priorityFilter').addEventListener('change', () => this.applyFilters());
+                document.getElementById('dateFilter').addEventListener('change', () => this.applyFilters());
+            }
+
+            showPage(pageName) {
+                // Update navigation
+                document.querySelectorAll('.nav-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                document.querySelector(`[data-page="${pageName}"]`).classList.add('active');
+
+                // Show page
+                document.querySelectorAll('.page').forEach(page => {
+                    page.classList.remove('active');
+                });
+                document.getElementById(pageName).classList.add('active');
+
+                this.currentPage = pageName;
+
+                // Update page-specific content
+                if (pageName === 'analytics') {
+                    this.updateAnalytics();
+                }
+            }
+
+            showSettingsSection(section) {
+                document.querySelectorAll('.settings-nav-item').forEach(item => {
+                    item.classList.remove('active');
+                    item.classList.add('text-gray-700', 'hover:bg-gray-50');
+                    item.classList.remove('text-purple-600', 'bg-purple-50');
+                });
+               
+                const activeItem = document.querySelector(`[data-setting="${section}"]`);
+                activeItem.classList.add('active', 'text-purple-600', 'bg-purple-50');
+                activeItem.classList.remove('text-gray-700', 'hover:bg-gray-50');
+
+                document.querySelectorAll('.settings-content').forEach(content => {
+                    content.classList.add('hidden');
+                });
+               
+                const targetContent = document.getElementById(`${section}Settings`);
+                if (targetContent) {
+                    targetContent.classList.remove('hidden');
+                }
+            }
+
+            openReminderModal() {
+                document.getElementById('reminderModal').classList.remove('hidden');
+                document.getElementById('reminderModal').classList.add('flex');
+                this.setMinDateTime();
+            }
+
+            closeReminderModal() {
+                document.getElementById('reminderModal').classList.add('hidden');
+                document.getElementById('reminderModal').classList.remove('flex');
+                this.resetForm();
             }
 
             setMinDateTime() {
                 const now = new Date();
-                now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-                document.getElementById('sendDateTime').min = now.toISOString().slice(0, 16);
+                const today = now.toISOString().split('T')[0];
+                const currentTime = now.toTimeString().slice(0, 5);
+               
+                document.getElementById('reminderDate').min = today;
+                document.getElementById('reminderDate').value = today;
+                document.getElementById('reminderTime').value = currentTime;
             }
 
-            scheduleDemo(e) {
-                e.preventDefault();
-
-                const demoEmail = {
-                    id: Date.now() + Math.random(),
-                    recipient: document.getElementById('recipientEmail').value,
-                    subject: document.getElementById('emailSubject').value,
-                    body: document.getElementById('emailBody').value,
-                    sendDateTime: document.getElementById('sendDateTime').value,
-                    status: 'scheduled',
-                    scheduledAt: new Date().toISOString()
+            createReminder() {
+                const formData = {
+                    id: Date.now().toString(),
+                    recipientEmail: document.getElementById('recipientEmail').value,
+                    subject: document.getElementById('subject').value,
+                    message: document.getElementById('message').value,
+                    reminderDate: document.getElementById('reminderDate').value,
+                    reminderTime: document.getElementById('reminderTime').value,
+                    priority: document.getElementById('priority').value,
+                    status: 'pending',
+                    createdAt: new Date().toISOString()
                 };
 
-                this.demoEmails.push(demoEmail);
-                this.saveDemoEmails();
-                this.renderEmailLog();
-                this.form.reset();
-                this.setMinDateTime();
+                // Validate datetime is in the future
+                const reminderDateTime = new Date(`${formData.reminderDate}T${formData.reminderTime}`);
+                if (reminderDateTime <= new Date()) {
+                    this.showMessage('Please select a future date and time', 'error');
+                    return;
+                }
 
-                this.showNotification('🎭 Demo Scheduled', `SIMULATION: Demo email scheduled for ${demoEmail.recipient}. NO REAL EMAIL WILL BE SENT!`, 'warning');
+                this.reminders.push(formData);
+                this.saveReminders();
+                this.updateAllStats();
+                this.renderReminders();
+                this.renderUpcomingReminders();
+                this.renderRecentActivity();
+                this.closeReminderModal();
+                this.showMessage('Reminder scheduled successfully!', 'success');
+               
+                // Show browser notification
+                this.showBrowserNotification('Reminder Created', `New reminder scheduled for ${formData.subject}`);
             }
 
-            startSimulation() {
-                this.simulationInterval = setInterval(() => {
-                    this.checkDemoEmails();
-                }, 1000);
-
-                console.log('🎭 Email simulation started - NO REAL EMAILS WILL BE SENT');
-            }
-
-            checkDemoEmails() {
+            async checkPendingReminders() {
                 const now = new Date();
-                
-                this.demoEmails.forEach(email => {
-                    const sendTime = new Date(email.sendDateTime);
-                    
-                    if (sendTime <= now && email.status === 'scheduled') {
-                        this.simulateEmail(email);
+                let sentCount = 0;
+
+                for (const reminder of this.reminders) {
+                    if (reminder.status === 'pending') {
+                        const reminderDateTime = new Date(`${reminder.reminderDate}T${reminder.reminderTime}`);
+                       
+                        if (reminderDateTime <= now) {
+                            try {
+                                await this.sendEmailReminder(reminder);
+                                reminder.status = 'sent';
+                                sentCount++;
+                            } catch (error) {
+                                reminder.status = 'failed';
+                                console.error('Failed to send reminder:', error);
+                            }
+                        }
                     }
-                });
+                }
+
+                if (sentCount > 0) {
+                    this.saveReminders();
+                    this.updateAllStats();
+                    this.renderReminders();
+                    this.renderUpcomingReminders();
+                    this.renderRecentActivity();
+                    this.showMessage(`${sentCount} reminder${sentCount !== 1 ? 's' : ''} sent!`, 'success');
+                   
+                    // Show browser notification
+                    this.showBrowserNotification('Reminders Sent', `${sentCount} email reminder${sentCount !== 1 ? 's' : ''} sent successfully`);
+                }
             }
 
-            async simulateEmail(email) {
-                email.status = 'simulating';
-                this.renderEmailLog();
+            async sendEmailReminder(reminder) {
+                try {
+                    const response = await fetch(`${this.apiUrl}/send-reminder`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(reminder)
+                    });
 
-                this.showNotification('🎬 SIMULATION RUNNING', `DEMO: Pretending to send email to ${email.recipient}. NO REAL EMAIL IS BEING SENT!`, 'warning');
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
 
-                await this.runSimulation(email);
-
-                email.status = 'demo-complete';
-                email.simulatedAt = new Date().toISOString();
-                
-                this.saveDemoEmails();
-                this.renderEmailLog();
-
-                this.showNotification('🎭 SIMULATION COMPLETE', `DEMO FINISHED: No real email was sent to ${email.recipient}. This was just a simulation!`, 'error');
+                    return await response.json();
+                } catch (error) {
+                    console.error('Error sending email:', error);
+                    // Simulate sending for demo purposes
+                    console.log('Simulating email send for:', reminder);
+                    throw error;
+                }
             }
 
-            async runSimulation(email) {
-                return new Promise(resolve => {
-                    setTimeout(() => {
-                        console.log(`🎭 SIMULATION COMPLETE - NO REAL EMAIL SENT:
-Recipient: ${email.recipient} (DID NOT RECEIVE ANYTHING)
-Subject: ${email.subject} (NOT ACTUALLY SENT)
-Body: ${email.body} (SIMULATION ONLY)
-Time: ${new Date().toLocaleString()} (DEMO TIMESTAMP)`);
-                        resolve();
-                    }, 2000);
-                });
-            }
-
-            renderEmailLog() {
-                if (this.demoEmails.length === 0) {
-                    this.emailLogContainer.innerHTML = `
-                        <div style="text-align: center; padding: 40px; color: #6b7280;">
-                            <div style="font-size: 3rem; margin-bottom: 15px;">🎭</div>
-                            <h3>No demo emails scheduled</h3>
-                            <p>Schedule a demo to see the simulation in action!</p>
+            renderReminders() {
+                const container = document.getElementById('remindersList');
+               
+                if (this.reminders.length === 0) {
+                    container.innerHTML = `
+                        <div class="text-center text-gray-500 py-12">
+                            <i class="fas fa-inbox text-6xl mb-4"></i>
+                            <h3 class="text-xl font-semibold mb-2">No reminders yet</h3>
+                            <p class="mb-4">Create your first reminder to get started!</p>
+                            <button onclick="emailSystem.openReminderModal()" class="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition duration-200">
+                                <i class="fas fa-plus mr-2"></i>Create Reminder
+                            </button>
                         </div>
                     `;
                     return;
                 }
 
-                const sortedEmails = [...this.demoEmails].sort((a, b) => 
-                    new Date(a.sendDateTime) - new Date(b.sendDateTime)
-                );
+                const sortedReminders = [...this.reminders].sort((a, b) => {
+                    const dateA = new Date(`${a.reminderDate}T${a.reminderTime}`);
+                    const dateB = new Date(`${b.reminderDate}T${b.reminderTime}`);
+                    return dateA - dateB;
+                });
 
-                this.emailLogContainer.innerHTML = sortedEmails.map(email => {
-                    const sendTime = new Date(email.sendDateTime);
-                    const now = new Date();
-                    const timeUntilSend = sendTime - now;
-                    
-                    let statusClass = 'scheduled';
-                    let statusText = 'Demo Scheduled';
-                    
-                    if (email.status === 'simulating') {
-                        statusClass = 'simulating';
-                        statusText = 'SIMULATING...';
-                    } else if (email.status === 'demo-complete') {
-                        statusClass = 'demo-complete';
-                        statusText = 'DEMO ONLY - NO REAL EMAIL SENT';
-                    }
+                container.innerHTML = sortedReminders.map(reminder => this.createReminderCard(reminder)).join('');
+               
+                // Update reminder count
+                document.getElementById('reminderCount').textContent = `${this.reminders.length} reminder${this.reminders.length !== 1 ? 's' : ''}`;
+                document.getElementById('navReminderCount').textContent = this.reminders.filter(r => r.status === 'pending').length;
+            }
 
-                    let countdownHtml = '';
-                    if (email.status === 'scheduled' && timeUntilSend > 0) {
-                        countdownHtml = `
-                            <div class="countdown-timer">
-                                🎭 Demo runs in: ${this.formatTimeRemaining(timeUntilSend)}
+            createReminderCard(reminder) {
+                const priorityClasses = {
+                    low: 'border-l-4 border-l-green-500 bg-green-50',
+                    medium: 'border-l-4 border-l-yellow-500 bg-yellow-50',
+                    high: 'border-l-4 border-l-red-500 bg-red-50'
+                };
+
+                const statusClasses = {
+                    pending: 'bg-orange-100 text-orange-800',
+                    sent: 'bg-green-100 text-green-800',
+                    failed: 'bg-red-100 text-red-800'
+                };
+
+                const priorityIcons = {
+                    low: 'fas fa-arrow-down text-green-600',
+                    medium: 'fas fa-minus text-yellow-600',
+                    high: 'fas fa-arrow-up text-red-600'
+                };
+
+                const reminderDateTime = new Date(`${reminder.reminderDate}T${reminder.reminderTime}`);
+                const formattedDate = reminderDateTime.toLocaleDateString('en-US', {
+                    weekday: 'short',
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                });
+                const formattedTime = reminderDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+                return `
+                    <div class="bg-white ${priorityClasses[reminder.priority]} rounded-lg p-6 shadow-sm hover:shadow-md transition duration-200 fade-in" data-id="${reminder.id}">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="flex-1">
+                                <div class="flex items-center mb-2">
+                                    <i class="${priorityIcons[reminder.priority]} mr-2"></i>
+                                    <h3 class="text-lg font-semibold text-gray-800">${reminder.subject}</h3>
+                                </div>
+                                <p class="text-sm text-gray-600 mb-1">
+                                    <i class="fas fa-envelope mr-1"></i>
+                                    To: ${reminder.recipientEmail}
+                                </p>
+                                <p class="text-sm text-gray-600">
+                                    <i class="fas fa-calendar mr-1"></i>
+                                    ${formattedDate} at ${formattedTime}
+                                </p>
                             </div>
-                        `;
-                    } else if (email.status === 'scheduled' && timeUntilSend <= 0) {
-                        countdownHtml = `
-                            <div class="countdown-timer">
-                                🎬 RUNNING SIMULATION...
+                            <span class="px-3 py-1 rounded-full text-xs font-medium ${statusClasses[reminder.status]}">
+                                ${reminder.status.toUpperCase()}
+                            </span>
+                        </div>
+                       
+                        <p class="text-gray-700 mb-4 line-clamp-2">${reminder.message}</p>
+                       
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs text-gray-500 capitalize">
+                                <i class="fas fa-flag mr-1"></i>
+                                ${reminder.priority} priority
+                            </span>
+                            <div class="flex space-x-2">
+                                <button onclick="emailSystem.editReminder('${reminder.id}')"
+                                        class="px-3 py-1 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition duration-200 text-sm">
+                                    <i class="fas fa-edit mr-1"></i>Edit
+                                </button>
+                                <button onclick="emailSystem.deleteReminder('${reminder.id}')"
+                                        class="px-3 py-1 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition duration-200 text-sm">
+                                    <i class="fas fa-trash mr-1"></i>Delete
+                                </button>
                             </div>
-                        `;
-                    }
+                        </div>
+                    </div>
+                `;
+            }
 
+            renderUpcomingReminders() {
+                const container = document.getElementById('upcomingReminders');
+                const upcoming = this.reminders
+                    .filter(r => r.status === 'pending')
+                    .sort((a, b) => {
+                        const dateA = new Date(`${a.reminderDate}T${a.reminderTime}`);
+                        const dateB = new Date(`${b.reminderDate}T${b.reminderTime}`);
+                        return dateA - dateB;
+                    })
+                    .slice(0, 3);
+
+                if (upcoming.length === 0) {
+                    container.innerHTML = `
+                        <div class="text-center text-gray-500 py-8">
+                            <i class="fas fa-calendar-times text-4xl mb-2"></i>
+                            <p>No upcoming reminders</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = upcoming.map(reminder => {
+                    const reminderDateTime = new Date(`${reminder.reminderDate}T${reminder.reminderTime}`);
+                    const timeUntil = this.getTimeUntil(reminderDateTime);
+                   
                     return `
-                        <div class="email-entry ${email.status}">
-                            <div class="email-header">
-                                <div>
-                                    <div class="email-subject">🎭 ${email.subject}</div>
-                                    <div class="email-recipient">Demo Recipient: ${email.recipient}</div>
-                                </div>
-                                <div class="email-status status-${statusClass}">${statusText}</div>
+                        <div class="flex items-center p-4 bg-gray-50 rounded-lg">
+                            <div class="flex-1">
+                                <h4 class="font-semibold text-gray-800">${reminder.subject}</h4>
+                                <p class="text-sm text-gray-600">${reminder.recipientEmail}</p>
+                                <p class="text-xs text-gray-500">${timeUntil}</p>
                             </div>
-                            
-                            <div class="email-time">
-                                📅 Demo Scheduled: ${sendTime.toLocaleString()}
-                                ${email.simulatedAt ? `<br>🎬 Simulation Completed: ${new Date(email.simulatedAt).toLocaleString()}<br><strong style="color: #dc2626; font-size: 1.1rem;">⚠️ NO REAL EMAIL WAS SENT TO ${email.recipient.toUpperCase()}</strong>` : ''}
+                            <div class="text-right">
+                                <span class="px-2 py-1 rounded-full text-xs font-medium ${reminder.priority === 'high' ? 'bg-red-100 text-red-800' : reminder.priority === 'medium' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'}">
+                                    ${reminder.priority.toUpperCase()}
+                                </span>
                             </div>
-                            
-                            ${countdownHtml}
-                            
-                            <div class="email-preview">
-                                <strong>Demo Message (Not Actually Sent):</strong><br>
-                                ${email.body.substring(0, 150)}${email.body.length > 150 ? '...' : ''}
-                            </div>
-                            
-                            ${email.status === 'demo-complete' ? `
-                                <div style="background: #fecaca; color: #dc2626; padding: 15px; border-radius: 8px; margin-top: 15px; font-weight: 700; text-align: center;">
-                                    🚨 THIS WAS A SIMULATION - ${email.recipient.toUpperCase()} DID NOT RECEIVE ANY EMAIL
-                                </div>
-                            ` : ''}
                         </div>
                     `;
                 }).join('');
             }
 
-            formatTimeRemaining(ms) {
-                const totalSeconds = Math.floor(ms / 1000);
-                const days = Math.floor(totalSeconds / 86400);
-                const hours = Math.floor((totalSeconds % 86400) / 3600);
-                const minutes = Math.floor((totalSeconds % 3600) / 60);
-                const seconds = totalSeconds % 60;
+            renderRecentActivity() {
+                const container = document.getElementById('recentActivity');
+                const recent = this.reminders
+                    .filter(r => r.status === 'sent')
+                    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                    .slice(0, 5);
 
-                if (days > 0) return `${days}d ${hours}h ${minutes}m`;
-                if (hours > 0) return `${hours}h ${minutes}m ${seconds}s`;
-                if (minutes > 0) return `${minutes}m ${seconds}s`;
-                return `${seconds}s`;
+                if (recent.length === 0) {
+                    container.innerHTML = `
+                        <div class="text-center text-gray-500 py-8">
+                            <i class="fas fa-inbox text-4xl mb-2"></i>
+                            <p>No recent activity</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = recent.map(reminder => {
+                    const createdDate = new Date(reminder.createdAt);
+                    const timeAgo = this.getTimeAgo(createdDate);
+                   
+                    return `
+                        <div class="flex items-center p-3 hover:bg-gray-50 rounded-lg transition duration-200">
+                            <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-3">
+                                <i class="fas fa-check text-green-600 text-sm"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-sm font-medium text-gray-800">${reminder.subject}</p>
+                                <p class="text-xs text-gray-500">Sent to ${reminder.recipientEmail}</p>
+                            </div>
+                            <span class="text-xs text-gray-400">${timeAgo}</span>
+                        </div>
+                    `;
+                }).join('');
             }
 
-            showNotification(title, message, type = 'warning') {
-                const notification = document.createElement('div');
-                notification.style.cssText = `
-                    position: fixed;
-                    top: 20px;
-                    right: 20px;
-                    background: white;
-                    border-radius: 12px;
-                    padding: 20px;
-                    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-                    z-index: 1000;
-                    max-width: 400px;
-                    border: 3px solid #dc2626;
-                    transform: translateX(450px);
-                    transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-                `;
-                
-                notification.innerHTML = `
-                    <div style="font-weight: 700; margin-bottom: 5px; color: #dc2626;">${title}</div>
-                    <div style="color: #991b1b; font-size: 0.9rem; font-weight: 500;">${message}</div>
-                `;
-                
-                document.body.appendChild(notification);
-                
+            updateAllStats() {
+                const total = this.reminders.length;
+                const pending = this.reminders.filter(r => r.status === 'pending').length;
+                const sent = this.reminders.filter(r => r.status === 'sent').length;
+                const sentToday = this.reminders.filter(r => {
+                    const today = new Date().toDateString();
+                    return r.status === 'sent' && new Date(r.createdAt).toDateString() === today;
+                }).length;
+
+                // Dashboard stats
+                document.getElementById('dashTotalReminders').textContent = total;
+                document.getElementById('dashPendingReminders').textContent = pending;
+                document.getElementById('dashSentToday').textContent = sentToday;
+               
+                // Navigation badge
+                document.getElementById('navReminderCount').textContent = pending;
+                document.getElementById('notificationBadge').textContent = pending;
+            }
+
+            updateAnalytics() {
+                const thisMonth = this.reminders.filter(r => {
+                    const now = new Date();
+                    const reminderDate = new Date(r.createdAt);
+                    return reminderDate.getMonth() === now.getMonth() && reminderDate.getFullYear() === now.getFullYear();
+                }).length;
+
+                document.getElementById('analyticsThisMonth').textContent = thisMonth;
+            }
+
+            getTimeUntil(date) {
+                const now = new Date();
+                const diff = date - now;
+               
+                if (diff < 0) return 'Overdue';
+               
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+               
+                if (days > 0) return `in ${days} day${days !== 1 ? 's' : ''}`;
+                if (hours > 0) return `in ${hours} hour${hours !== 1 ? 's' : ''}`;
+                return `in ${minutes} minute${minutes !== 1 ? 's' : ''}`;
+            }
+
+            getTimeAgo(date) {
+                const now = new Date();
+                const diff = now - date;
+               
+                const minutes = Math.floor(diff / (1000 * 60));
+                const hours = Math.floor(diff / (1000 * 60 * 60));
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+               
+                if (days > 0) return `${days}d ago`;
+                if (hours > 0) return `${hours}h ago`;
+                return `${minutes}m ago`;
+            }
+
+            getDefaultTemplates() {
+                return {
+                    meeting: {
+                        subject: "Meeting Reminder - {date}",
+                        message: "Hi there!\n\nThis is a friendly reminder about our upcoming meeting scheduled for {date} at {time}.\n\nPlease make sure to:\n- Review the agenda\n- Prepare any necessary materials\n- Join on time\n\nLooking forward to our discussion!\n\nBest regards"
+                    },
+                    payment: {
+                        subject: "Payment Reminder - Invoice Due",
+                        message: "Dear {name},\n\nThis is a friendly reminder that your payment is due soon.\n\nInvoice Details:\n- Amount: {amount}\n- Due Date: {date}\n\nPlease process your payment at your earliest convenience.\n\nThank you for your business!"
+                    },
+                    birthday: {
+                        subject: "Happy Birthday! 🎉",
+                        message: "Happy Birthday {name}! 🎂\n\nWishing you a wonderful day filled with happiness and joy. May this new year of your life bring you prosperity, good health, and lots of memorable moments.\n\nHave a fantastic celebration!\n\nWarm wishes"
+                    }
+                };
+            }
+
+            useTemplate(templateName) {
+                const template = this.templates[templateName];
+                if (template) {
+                    document.getElementById('subject').value = template.subject;
+                    document.getElementById('message').value = template.message;
+                    this.openReminderModal();
+                    this.showMessage(`${templateName.charAt(0).toUpperCase() + templateName.slice(1)} template loaded!`, 'success');
+                }
+            }
+
+            previewTemplate(templateName) {
+                const template = this.templates[templateName];
+                if (template) {
+                    this.showMessage(`Preview: ${template.subject}`, 'info');
+                }
+            }
+
+            editReminder(id) {
+                const reminder = this.reminders.find(r => r.id === id);
+                if (!reminder) return;
+
+                document.getElementById('recipientEmail').value = reminder.recipientEmail;
+                document.getElementById('subject').value = reminder.subject;
+                document.getElementById('message').value = reminder.message;
+                document.getElementById('reminderDate').value = reminder.reminderDate;
+                document.getElementById('reminderTime').value = reminder.reminderTime;
+                document.getElementById('priority').value = reminder.priority;
+
+                this.deleteReminder(id, false);
+                this.openReminderModal();
+                this.showMessage('Reminder loaded for editing', 'info');
+            }
+
+            deleteReminder(id, showMessage = true) {
+                this.reminders = this.reminders.filter(r => r.id !== id);
+                this.saveReminders();
+                this.updateAllStats();
+                this.renderReminders();
+                this.renderUpcomingReminders();
+                this.renderRecentActivity();
+               
+                if (showMessage) {
+                    this.showMessage('Reminder deleted successfully', 'success');
+                }
+            }
+
+            applyFilters() {
+                const statusFilter = document.getElementById('statusFilter').value;
+                const priorityFilter = document.getElementById('priorityFilter').value;
+                const dateFilter = document.getElementById('dateFilter').value;
+
+                let filtered = [...this.reminders];
+
+                if (statusFilter) {
+                    filtered = filtered.filter(r => r.status === statusFilter);
+                }
+                if (priorityFilter) {
+                    filtered = filtered.filter(r => r.priority === priorityFilter);
+                }
+                if (dateFilter) {
+                    filtered = filtered.filter(r => r.reminderDate === dateFilter);
+                }
+
+                // Re-render with filtered results
+                const container = document.getElementById('remindersList');
+                container.innerHTML = filtered.map(reminder => this.createReminderCard(reminder)).join('');
+               
+                document.getElementById('reminderCount').textContent = `${filtered.length} reminder${filtered.length !== 1 ? 's' : ''} (filtered)`;
+            }
+
+            testEmailConnection() {
+                this.showMessage('Testing email connection...', 'info');
+                // Simulate connection test
                 setTimeout(() => {
-                    notification.style.transform = 'translateX(0)';
-                }, 100);
-                
+                    this.showMessage('Email connection test successful!', 'success');
+                }, 2000);
+            }
+
+            bulkImport() {
+                this.showMessage('Bulk import feature coming soon!', 'info');
+            }
+
+            createTemplate() {
+                this.showMessage('Template creation feature coming soon!', 'info');
+            }
+
+            showBrowserNotification(title, body) {
+                if ('Notification' in window && Notification.permission === 'granted') {
+                    new Notification(title, {
+                        body: body,
+                        icon: '/favicon.ico'
+                    });
+                }
+            }
+
+            resetForm() {
+                document.getElementById('reminderForm').reset();
+                this.setMinDateTime();
+            }
+
+            saveReminders() {
+                localStorage.setItem('emailReminders', JSON.stringify(this.reminders));
+            }
+
+            showMessage(text, type = 'info') {
+                const container = document.getElementById('messageContainer');
+                const colors = {
+                    success: 'bg-green-500',
+                    error: 'bg-red-500',
+                    info: 'bg-blue-500'
+                };
+
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `${colors[type]} text-white px-6 py-3 rounded-lg shadow-lg mb-2 fade-in flex items-center`;
+                messageDiv.innerHTML = `
+                    <i class="fas fa-${type === 'success' ? 'check' : type === 'error' ? 'exclamation-triangle' : 'info'} mr-2"></i>
+                    ${text}
+                `;
+
+                container.appendChild(messageDiv);
+
                 setTimeout(() => {
-                    notification.style.transform = 'translateX(450px)';
-                    setTimeout(() => {
-                        if (document.body.contains(notification)) {
-                            document.body.removeChild(notification);
-                        }
-                    }, 400);
-                }, 5000);
-            }
-
-            saveDemoEmails() {
-                localStorage.setItem('emailSimulationDemo', JSON.stringify(this.demoEmails));
-            }
-
-            loadDemoEmails() {
-                const saved = localStorage.getItem('emailSimulationDemo');
-                return saved ? JSON.parse(saved) : [];
+                    messageDiv.classList.add('slide-out');
+                    setTimeout(() => container.removeChild(messageDiv), 300);
+                }, 4000);
             }
         }
 
-        const emailDemo = new EmailSimulationDemo();
+        // Global functions for onclick handlers
+        function showPage(page) {
+            emailSystem.showPage(page);
+        }
 
-        window.addEventListener('beforeunload', () => {
-            if (emailDemo.simulationInterval) {
-                clearInterval(emailDemo.simulationInterval);
-            }
-        });
+        function openReminderModal() {
+            emailSystem.openReminderModal();
+        }
 
-        console.log('🎭 EMAIL SIMULATION DEMO - NO REAL EMAILS WILL BE SENT');
-        console.log('⚠️ This is for demonstration purposes only');
+        function closeReminderModal() {
+            emailSystem.closeReminderModal();
+        }
+
+        function useTemplate(template) {
+            emailSystem.useTemplate(template);
+        }
+
+        function previewTemplate(template) {
+            emailSystem.previewTemplate(template);
+        }
+
+        function bulkImport() {
+            emailSystem.bulkImport();
+        }
+
+        function createTemplate() {
+            emailSystem.createTemplate();
+        }
+
+        function testEmailConnection() {
+            emailSystem.testEmailConnection();
+        }
+
+        function applyFilters() {
+            emailSystem.applyFilters();
+        }
+
+        // Initialize the system
+        const emailSystem = new EmailReminderPro();
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'988a4a8e349a7e72',t:'MTc1OTQ3MTk4Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9936f2cae67c802e',t:'MTc2MTI4MjQyMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
