@@ -1,9 +1,9 @@
-# 📧 Email Reminder System
+ Email Reminder System
 
 An automated **Email Reminder System** that helps users schedule and send reminder emails at specified times.  
 Built with simplicity, reliability, and automation in mind.
 ---
-##features
+features
 - Schedule reminder emails for future dates and times  
 - Automatically send reminders via email  
 - Store and manage reminder details in a database  
@@ -11,14 +11,14 @@ Built with simplicity, reliability, and automation in mind.
 - Multiple user support (optional)  
 - Email delivery status logging
 ----
-  ##Tech Stack
+  Tech Stack
 - **Backend:** Python (Flask / Django / FastAPI)  
 - **Database:** SQLite / MySQL / PostgreSQL  
 - **Email Service:** SMTP (Gmail, Outlook, etc.)  
 - **Scheduler:** APScheduler / Celery / Cron  
 ---
-##Installation
-### 1. Clone the repository
+Installation
+1. Clone the repository
 ```bash
 git clone https://github.com/your-username/email-reminder-system.git
 cd email-reminder-system
